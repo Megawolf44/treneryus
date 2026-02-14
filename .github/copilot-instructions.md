@@ -1,43 +1,37 @@
 # Copilot Instructions for obumov_python
+# Copilot Instructions for obumov_python
 
-## Что это за проект
-Учебный репозиторий с небольшими, самодостаточными Python-скриптами — каждая программа это «урок»: краткая теория в начале файла (тройная строка), затем наглядные примеры и демонстрации (часто с `input()`). В каталоге `avtokliker/` находятся Windows-специфичные примеры автоматизации (см. `avtokliker/.github/copilot-instructions.md`).
+## Коротко — почему этот репозиторий
+Учебный набор самостоятельных Python-скриптов: каждый файл — «урок» с короткой теорией в начале (тройная строка), затем демонстрации и примеры. Есть отдельная папка с Windows-автоматизацией: `avtokliker/`.
 
-## Большая картина (Why) 🔍
-- Цель: понятная демонстрация базовых концептов Python (типы, списки, циклы, словари) через читаемые, запускаемые примеры.
-- Структура: набор отдельных файлов-уроков (например `lesson.py`, `lists.py`, `cikl.py`, `struc_dann.py`, `slov_funkc.py`, `povtorenie_1go_modul.py`) и один вспомогательный подмодуль `avtokliker/`.
+## Быстрые правила для AI-агента
+- Сохранить русский язык в комментариях, docstring и примерах.
+- Верхний блок файла — тройной строковый header с теорией (объяснить «почему»).
+- Демонстрации должны печатать результат через `print()`; если используется `input()`, добавьте non-interactive альтернативу для CI.
 
-## Что нужно знать сразу (Key patterns) ✅
-- Локаль/язык: **все комментарии, docstring и пользовательские переменные должны быть на русском**.
-- Header: теория размещается в начале файла в тройной строке `'''...'''` — объяснить «почему» до кода.
-- Примеры: рабочие примеры часто делаются как демонстрации; показывайте вызов и результат (`a.append(1)` → `print(a)`).
-- Уровни примеров: для контрольных структур предпочитают 3 уровня сложности (Simple / Medium / Complex).
-- Импортируемые функции: оборачивайте демонстрации в `if __name__ == '__main__'`.
+## Что открыть в первую очередь
+- Теоретический header и примеры в начале файла (пример: [lesson.py](lesson.py)).
+- Модули с функциями и демонстрациями: [slov_funkc.py](slov_funkc.py) показывает паттерн docstring + демонстрации.
+- Автоматизация Windows: [avtokliker/klicer.py](avtokliker/klicer.py) и [avtokliker/example.py](avtokliker/example.py).
 
-## Запуск, зависимости и отладка 🛠️
-- Запуск: `python <file>.py` (Windows: PowerShell recommended). Многие файлы используют `input()` — для CI добавьте альтернативный non-interactive пример.
-- Зависимости: верхний уровень репозитория не требует внешних пакетов. `avtokliker/` использует `ahk` (указано в `avtokliker/.github/copilot-instructions.md`) — create/activate `.venv` and `pip install ahk` or `ahk[binary]`.
-- Тесты: нет глобальной тестовой базы. Если добавляете тесты, use `pytest`, place them under `tests/`, and skip Windows-only automation tests with markers (e.g. `@pytest.mark.skipif(os.name != 'nt', reason='Windows only')`).
+## Платформа и зависимости
+- Запуск: `python <file>.py` (PowerShell на Windows рекомендуем).
+- Рекомендуется виртуальное окружение: `python -m venv .venv` + `.\\.venv\\Scripts\\activate`.
+- AHK: `pip install ahk` или `pip install "ahk[binary]"`. Уточните в PR, если добавляете бинарные зависимости.
 
-## Integration points & gotchas ⚠️
-- `avtokliker/` interacts with OS input devices — automation moves cursor, registers hotkeys, may need elevated rights; always add `--dry-run`/`--simulate` and clear safety notes when adding examples.
-- Avoid destructive examples (broad `taskkill` usage). Preserve explicit safety comments found in `avtokliker/klicer.py` and `.venv/example.py`.
-- Preserve Russian comments and non-ASCII text when editing files — they are intentional teaching artifacts.
+## Безопасность и осторожности
+- Любая работа в `avtokliker/` потенциально управляет вводом/выводом ОС — добавляйте `--dry-run`/`--simulate` для демонстраций и документируйте требуемые права.
+- Избегайте агрессивных `taskkill` или массовых действий без явного предупреждения (см. [avtokliker/example.py](avtokliker/example.py)).
 
-## Files to inspect first 📁
-- `lesson.py`, `lists.py`, `cikl.py`, `struc_dann.py`, `slov_funkc.py`, `povtorenie_1go_modul.py` — canonical lesson patterns.
-- `avtokliker/klicer.py` and `avtokliker/.venv/example.py` — Windows automation demos and safety patterns.
-- `avtokliker/.github/copilot-instructions.md` — project-specific automation guidance.
+## Тесты и CI-паттерны
+- Тестовой инфраструктуры в репозитории нет; при добавлении используйте `pytest` и каталог `tests/`.
+- Для Windows-only тестов используйте маркер: `@pytest.mark.skipif(os.name != 'nt', reason='Windows only')`.
 
-## PR checklist (short) ✅
-- Комментарии и docstrings на русском
-- В header присутствует тройная теоретическая строка
-- Демонстрации показывают явный `print()`-вывод
-- Для демонстраций добавлен `if __name__ == '__main__'` блок при добавлении импортируемых функций
+## Кодстайл и PR-checklist (актуально)
+- Комментарии и docstrings — на русском.
+- Тройной строковый header присутствует в начале урока.
+- Демонстрации выводят результаты через `print()`; при использовании `input()` — неблокирующая альтернатива для CI.
+- Если добавляете/меняете примеры в `avtokliker/` — укажите `--dry-run` и права, задокументируйте влияние на систему.
+
+Если хотите, могу автоматически добавить шаблон `--dry-run` и non-interactive демонстрацию в один или два выбранных урока — указать файлы, которые обновить?
 - Не сломать существующие интерактивные примеры; предпочитайте добавить новый файл, а не массово рефакторить
-- Для изменений, затрагивающих платформу/зависимости: указать шаги установки и требуемые права в PR
-- Для автоматизации: добавить `--dry-run`/`--simulate`, документировать риск
-
----
-
-Если что-то неясно (например, нужен формат примера для автоматизированного теста или предпочтение оформления), скажите — уточню и допишу инструкцию.
